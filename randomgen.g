@@ -14,6 +14,28 @@ QuickcheckRandomList := function(generator)
   end;
 end;
 
+QuickcheckRandomObject := function(constructor, arg_gens)
+  return function(max)
+    local arg, arg_list;
+    arg_list := [];
+    for arg in arg_gens do
+      Append(arg_list, [arg(max)]);
+    od;
+    return CallFuncList(constructor, arg_list);
+  end;
+end;
+
+QuickcheckRecord := function(attribute_names, arg_gens)
+  return function(max)
+    local result, i;
+    result := rec();
+    for i in [1..Length(arg_gens)] do
+      result.(attribute_names[i]) := arg_gens[i](max);
+    od;
+    return result;
+  end;
+end;
+
 QuickcheckRandomPermutation := function(max)
   local int1, int2;
   int1 := Random([1..max]);
@@ -65,7 +87,5 @@ QuickcheckRandomGroup := function(max)
   local type, size;
   type := Random([1..Length(group_types)]);
   size := Random([1..max]);
-  Print(size, "\n");
-  Print(type, "\n");
   return group_types[type](size);
 end;
