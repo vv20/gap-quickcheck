@@ -2,14 +2,16 @@ QuickcheckRandomInt := function(max)
   return Random([1..max]);
 end;
 
-QuickcheckRandomList := function(RandomGen, max)
-  local length, result, i;
-  length := Random([1..max]);
-  result := [];
-  for i in [0..length] do
-    Append(result, [RandomGen(max)]);
-  od;
-  return result;
+QuickcheckRandomList := function(generator)
+  return function(max)
+    local length, result, i;
+    length := Random([1..max]);
+    result := [];
+    for i in [0..length] do
+      Append(result, [generator(max)]);
+    od;
+    return result;
+  end;
 end;
 
 QuickcheckRandomPermutation := function(max)
