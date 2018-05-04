@@ -6,7 +6,8 @@ Expect := function(func)
   given := function(arg_gens)
     local to_have_properties;
     to_have_properties := function(props_list)
-      local result, args_list, i, j, arg, prop;
+      local result, args_list, i, j, arg, prop, tests_failed;
+      tests_failed := 0;
       for i in [1..no_reps] do
         for j in [1..max_size] do
           args_list := [];
@@ -16,6 +17,7 @@ Expect := function(func)
           result := CallFuncList(func, args_list);
           for prop in props_list do
             if not prop(result) then
+              tests_failed := tests_failed + 1;
               Print("Test failed with arguments:\n");
               for arg in args_list do
                 Print(arg, "\n");
@@ -24,6 +26,7 @@ Expect := function(func)
           od;
         od;
       od;
+      Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed");
     end;
     return rec(to_have_properties := to_have_properties);
   end;
