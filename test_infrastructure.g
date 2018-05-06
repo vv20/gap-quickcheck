@@ -30,25 +30,35 @@ Expect := function(func)
       Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed");
     end;
 
-    to_equal := function(expected_result)
-      local result, args_list, i, j, arg, tests_failed;
-      tests_failed := 0;
-      for i in [1..no_reps] do
-        for j in [1..max_size] do
-          args_list := [];
-          for arg in arg_gens do
-            Append(args_list, [arg(j)]);
-          od;
-          result := CallFuncList(func, args_list);
-          if not result = expected_result then
-            tests_failed := tests_failed + 1;
-            Print("Test failed with arguments:\n");
-            for arg in args_list do
-              Print(arg, "\n");
+    to_equal := function(func2)
+      local on_arguments;
+      on_arguments := function(list_of_indices)
+          local result1, args_list, i, j, arg, tests_failed, index, args_list2, result2;
+          tests_failed := 0;
+          for i in [1..no_reps] do
+            for j in [1..max_size] do
+              args_list := [];
+              for arg in arg_gens do
+                Append(args_list, [arg(j)]);
+              od;
+              result1 := CallFuncList(func, args_list);
+              # assemble the set of arguments for the second function
+              args_list2 := [];
+              for index in list_of_indices do
+                Append(args_list2, [args_list[index]]);
+              od;
+              result2 := CallFuncList(func2, args_list2);
+              if not result1 = result2 then
+                tests_failed := tests_failed + 1;
+                Print("Test failed with arguments:\n");
+                for arg in args_list do
+                  Print(arg, "\n");
+                od;
+              fi;
             od;
-          fi;
-        od;
-      od;
+          od;
+      end;
+      return rec(on_arguments := on_arguments);
     end;
 
     return rec(

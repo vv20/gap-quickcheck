@@ -19,10 +19,21 @@ expected result.
 ## API
 The "randomgen.g" file contains functions for generating random input. All of these have the format of taking in a maximum size and returning an argument of that size or smaller. An exxception is the list generator, which takes another generator as an argument and returns a function for generating a list of those.
 
-The "test_infrastructure.g" file has the functionality for running the tests. It should be used as:
+The "test_infrastructure.g" file has the functionality for running the tests. Currently available
+testing functions are:
+
+- Probing the result of a function for a list of given properties.
 
 ```gap
 Expect(func).given(list_of_argument_generators).to_have_properties(list_of_expected_properties);
+```
+
+- Testing that two functions, if given access to the same set of arguments, produce the same
+result. The test would call `func1` on the generated arguments and call `func2` on the 
+arguments of `func` indicated by the provided list of indices.
+
+```gap
+Expect(func1).given(list_of_argument_generators).to_equal(func2).on_arguments(list_of_indices);
 ```
 
 The maximum input size and the number of repetitions for each size can be changed with the functions `SetQuickcheckMaxSize` and `SetQuickcheckNumberOfReps` respectively.
