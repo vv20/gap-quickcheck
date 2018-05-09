@@ -36,6 +36,14 @@ arguments of `func` indicated by the provided list of indices.
 Expect(func1).given(list_of_argument_generators).to_equal(func2).on_arguments(list_of_indices);
 ```
 
+- Verifying that the function breaks, or doesn't break.
+```gap
+Expect(func).given(list_of_argument_generators).to_break();
+```
+```gap
+Expect(func).given(list_of_argument_generators).to_not_break();
+```
+
 The maximum input size and the number of repetitions for each size can be changed with the functions `SetQuickcheckMaxSize` and `SetQuickcheckNumberOfReps` respectively.
 
 ## References

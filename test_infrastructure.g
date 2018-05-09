@@ -4,7 +4,7 @@ no_reps := 1;
 Expect := function(func)
   local given;
   given := function(arg_gens)
-    local to_have_properties, to_equal;
+    local to_have_properties, to_equal, to_not_break, to_break;
 
     to_have_properties := function(props_list)
       local result, args_list, i, j, arg, prop, tests_failed;
@@ -27,7 +27,7 @@ Expect := function(func)
           od;
         od;
       od;
-      Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed");
+      Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed\n");
     end;
 
     to_equal := function(func2)
@@ -57,15 +57,67 @@ Expect := function(func)
               fi;
             od;
           od;
+          Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed\n");
       end;
       return rec(on_arguments := on_arguments);
     end;
 
+    to_not_break := function()
+      local prev_value, args_list, i, j, exited_cleanly, tests_failed, arg;
+      prev_value := BreakOnError;
+      BreakOnError := false;
+      tests_failed := 0;
+      for i in [1..no_reps] do
+        for j in [1..max_size] do
+          args_list := [];
+          for arg in arg_gens do
+            Append(args_list, [arg(j)]);
+          od;
+          exited_cleanly := CALL_WITH_CATCH(func, args_list)[1];
+          if not exited_cleanly then
+              Print("Test failed with arguments:\n");
+              for arg in args_list do
+                Print(arg, "\n");
+              od;
+              tests_failed := tests_failed + 1;
+          fi;
+        od;
+      od;
+      Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed\n");
+      BreakOnError := prev_value;
+    end;
+
+    to_break := function()
+      local prev_value, args_list, i, j, exited_cleanly, tests_failed, arg;
+      prev_value := BreakOnError;
+      BreakOnError := false;
+      tests_failed := 0;
+      for i in [1..no_reps] do
+        for j in [1..max_size] do
+          args_list := [];
+          for arg in arg_gens do
+            Append(args_list, [arg(j)]);
+          od;
+          exited_cleanly := CALL_WITH_CATCH(func, args_list)[1];
+          if exited_cleanly then
+              Print("Test failed with arguments:\n");
+              for arg in args_list do
+                Print(arg, "\n");
+              od;
+              tests_failed := tests_failed + 1;
+          fi;
+        od;
+      od;
+      Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed\n");
+      BreakOnError := prev_value;
+    end;
     return rec(
     to_have_properties := to_have_properties,
-    to_equal := to_equal
+    to_equal := to_equal,
+    to_not_break := to_not_break
     );
   end;
+
   return rec(given := given);
 end;
 
