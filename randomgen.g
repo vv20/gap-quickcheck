@@ -1,8 +1,8 @@
-QuickcheckRandomInt := function(max)
+QuickcheckInt := function(max)
   return Random([1..max]);
 end;
 
-QuickcheckRandomList := function(generator)
+QuickcheckList := function(generator)
   return function(max)
     local length, result, i;
     length := Random([1..max]);
@@ -14,7 +14,7 @@ QuickcheckRandomList := function(generator)
   end;
 end;
 
-QuickcheckRandomSet := function(generator)
+QuickcheckSet := function(generator)
   return function(max)
     local length, result, i, member;
     length := Random([1..max]);
@@ -30,7 +30,7 @@ QuickcheckRandomSet := function(generator)
   end;
 end;
 
-QuickcheckRandomObject := function(constructor, arg_gens)
+QuickcheckObject := function(constructor, arg_gens)
   return function(max)
     local arg, arg_list;
     arg_list := [];
@@ -52,7 +52,7 @@ QuickcheckRecord := function(attribute_names, arg_gens)
   end;
 end;
 
-QuickcheckRandomPermutation := function(max)
+QuickcheckPermutation := function(max)
   local int1, int2, length, i, result_list, result;
   length := Random([1..max]);
   result_list := [];
@@ -105,13 +105,13 @@ QuickcheckPermutationGroup := function(max)
   length := Random([1..max]);
   permutation_list := [];
   for i in [1..length] do
-    Append(permutation_list, [QuickcheckRandomPermutation(max)]);
+    Append(permutation_list, [QuickcheckPermutation(max)]);
   od;
   return CallFuncList(Group, permutation_list);
 end;
 
-QuickcheckRandomCoset := function(max)
-  return QuickcheckPermutationGroup(max) * QuickcheckRandomPermutation(max);
+QuickcheckCoset := function(max)
+  return QuickcheckPermutationGroup(max) * QuickcheckPermutation(max);
 end;
 
 group_types := [
@@ -124,7 +124,7 @@ group_types := [
   QuickcheckPermutationGroup
 ];
 
-QuickcheckRandomGroup := function(max)
+QuickcheckGroup := function(max)
   local type, size;
   type := Random([1..Length(group_types)]);
   size := Random([1..max]);
