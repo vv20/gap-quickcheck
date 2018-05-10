@@ -110,13 +110,18 @@ QuickcheckPermutationGroup := function(max)
   return CallFuncList(Group, permutation_list);
 end;
 
+QuickcheckRandomCoset := function(max)
+  return QuickcheckPermutationGroup(max) * QuickcheckRandomPermutation(max);
+end;
+
 group_types := [
   CyclicGroup,
   QuickcheckAbelianGroup,
   #ElementaryAbelianGroup,
   FreeAbelianGroup,
   QuickcheckDihedralGroup,
-  QuickcheckQuaternionGroup
+  QuickcheckQuaternionGroup,
+  QuickcheckPermutationGroup
 ];
 
 QuickcheckRandomGroup := function(max)
