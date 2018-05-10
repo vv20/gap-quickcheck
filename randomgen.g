@@ -19,10 +19,9 @@ QuickcheckRandomSet := function(generator)
     local length, result, i, member;
     length := Random([1..max]);
     result := [];
-    for i in [1..length] do
+    for i in [0..length] do
       member := generator(max);
       while \in(member, result) do
-        Print(member, "\n");
         member := generator(max);
       od;
       Append(result, [member]);
@@ -54,13 +53,23 @@ QuickcheckRecord := function(attribute_names, arg_gens)
 end;
 
 QuickcheckRandomPermutation := function(max)
-  local int1, int2;
+  local int1, int2, length, i, result_list, result;
+  length := Random([1..max]);
+  result_list := [];
   int1 := Random([1..max]);
-  int2 := Random([1..max]);
-  while int1 = int2 do
-    int2 := Random([1..max]);
+  for i in [1..length] do
+      int2 := Random([1..max]);
+      while int1 = int2 do
+        int2 := Random([1..max]);
+      od;
+      Append(result_list, [(int1, int2)]);
+      int1 := int2;
   od;
-  return (int1, int2);
+  result := result_list[1];
+  for i in [2..length] do
+    result := result * result_list[i];
+  od;
+  return result;
 end;
 
 QuickcheckAbelianGroup := function(max)
