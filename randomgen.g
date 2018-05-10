@@ -7,10 +7,27 @@ QuickcheckRandomList := function(generator)
     local length, result, i;
     length := Random([1..max]);
     result := [];
-    for i in [0..length] do
+    for i in [1..length] do
       Append(result, [generator(max)]);
     od;
     return result;
+  end;
+end;
+
+QuickcheckRandomSet := function(generator)
+  return function(max)
+    local length, result, i, member;
+    length := Random([1..max]);
+    result := [];
+    for i in [1..length] do
+      member := generator(max);
+      while \in(member, result) do
+        Print(member, "\n");
+        member := generator(max);
+      od;
+      Append(result, [member]);
+    od;
+    return Set(result);
   end;
 end;
 
