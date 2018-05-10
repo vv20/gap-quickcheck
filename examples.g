@@ -11,11 +11,11 @@ Read("test_infrastructure.g");
 #Expect(func1).given([QuickcheckAbelianGroup, QuickcheckAbelianGroup]).to_equal(func2).on_arguments([1,2]);
 
 # example for predicate checking with list sorting
-#func := function(l)
-#  Sort(l);
-#  return l;
-#end;
-#Expect(func).given([QuickcheckRandomList(QuickcheckRandomInt)]).to_have_properties(IsSortedList);
+func := function(l)
+  Sort(l);
+  return l;
+end;
+Expect(func).given([QuickcheckRandomList(QuickcheckRandomInt)]).to_have_properties([IsSortedList]);
 
 # examples for checking for breaks
 Expect(Size).given([QuickcheckRandomGroup]).to_not_break();
