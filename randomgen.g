@@ -100,6 +100,16 @@ QuickcheckDihedralGroup := function(max)
   return DihedralGroup(rounded_size);
 end;
 
+QuickcheckPermutationGroup := function(max)
+  local length, permutation_list, i;
+  length := Random([1..max]);
+  permutation_list := [];
+  for i in [1..length] do
+    Append(permutation_list, [QuickcheckRandomPermutation(max)]);
+  od;
+  return CallFuncList(Group, permutation_list);
+end;
+
 group_types := [
   CyclicGroup,
   QuickcheckAbelianGroup,
