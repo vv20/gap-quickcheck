@@ -8,7 +8,7 @@ QuickcheckList := function(generator)
     length := Random([1..max]);
     result := [];
     for i in [1..length] do
-      Append(result, [generator(max)]);
+      Add(result, generator(max));
     od;
     return result;
   end;
@@ -21,10 +21,10 @@ QuickcheckSet := function(generator)
     result := [];
     for i in [0..length] do
       member := generator(max);
-      while \in(member, result) do
+      while member in result do
         member := generator(max);
       od;
-      Append(result, [member]);
+      Add(result, member);
     od;
     return Set(result);
   end;
@@ -35,7 +35,7 @@ QuickcheckObject := function(constructor, arg_gens)
     local arg, arg_list;
     arg_list := [];
     for arg in arg_gens do
-      Append(arg_list, [arg(max)]);
+      Add(arg_list, arg(max));
     od;
     return CallFuncList(constructor, arg_list);
   end;
@@ -53,23 +53,7 @@ QuickcheckRecord := function(attribute_names, arg_gens)
 end;
 
 QuickcheckPermutation := function(max)
-  local int1, int2, length, i, result_list, result;
-  length := Random([1..max]);
-  result_list := [];
-  int1 := Random([1..max]);
-  for i in [1..length] do
-      int2 := Random([1..max]);
-      while int1 = int2 do
-        int2 := Random([1..max]);
-      od;
-      Append(result_list, [(int1, int2)]);
-      int1 := int2;
-  od;
-  result := result_list[1];
-  for i in [2..length] do
-    result := result * result_list[i];
-  od;
-  return result;
+  return PermList(FLOYDS_ALGORITHM(GlobalRandomSource,max,true));
 end;
 
 QuickcheckAbelianGroup := function(max)
@@ -77,7 +61,7 @@ QuickcheckAbelianGroup := function(max)
   size := Random([1..max]);
   ints := [];
   for i in [0..size] do
-    Append(ints, [Random([1..max])]);
+    Add(ints, Random([1..max]));
   od;
   return AbelianGroup(ints);
 end;
@@ -105,7 +89,7 @@ QuickcheckPermutationGroup := function(max)
   length := Random([1..max]);
   permutation_list := [];
   for i in [1..length] do
-    Append(permutation_list, [QuickcheckPermutation(max)]);
+    Add(permutation_list, QuickcheckPermutation(max));
   od;
   return CallFuncList(Group, permutation_list);
 end;

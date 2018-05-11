@@ -13,7 +13,7 @@ Expect := function(func)
         for j in [1..max_size] do
           args_list := [];
           for arg in arg_gens do
-            Append(args_list, [arg(j)]);
+            Add(args_list, arg(j));
           od;
           result := CallFuncList(func, args_list);
           for prop in props_list do
@@ -39,13 +39,13 @@ Expect := function(func)
             for j in [1..max_size] do
               args_list := [];
               for arg in arg_gens do
-                Append(args_list, [arg(j)]);
+                Add(args_list, arg(j));
               od;
               result1 := CallFuncList(func, args_list);
               # assemble the set of arguments for the second function
               args_list2 := [];
               for index in list_of_indices do
-                Append(args_list2, [args_list[index]]);
+                Add(args_list2, args_list[index]);
               od;
               result2 := CallFuncList(func2, args_list2);
               if not result1 = result2 then
@@ -71,7 +71,7 @@ Expect := function(func)
         for j in [1..max_size] do
           args_list := [];
           for arg in arg_gens do
-            Append(args_list, [arg(j)]);
+            Add(args_list, arg(j));
           od;
           exited_cleanly := CALL_WITH_CATCH(func, args_list)[1];
           if not exited_cleanly then
@@ -96,7 +96,7 @@ Expect := function(func)
         for j in [1..max_size] do
           args_list := [];
           for arg in arg_gens do
-            Append(args_list, [arg(j)]);
+            Add(args_list, arg(j));
           od;
           exited_cleanly := CALL_WITH_CATCH(func, args_list)[1];
           if exited_cleanly then
