@@ -1,3 +1,5 @@
+LoadPackage("Digraph");
+
 QuickcheckInt := function(max)
   return Random([1..max]);
 end;
@@ -96,6 +98,20 @@ end;
 
 QuickcheckCoset := function(max)
   return QuickcheckPermutationGroup(max) * QuickcheckPermutation(max);
+end;
+
+QuickcheckDigraph := function(max)
+  local length, nodes, no_links, source, range, i;
+  length := Random([1..max]);
+  no_links := Random([1..length]);
+  nodes := [1..length];
+  source := [];
+  range := [];
+  for i in [1..no_links] do
+    Add(source, Random(nodes));
+    Add(range, Random(nodes));
+  od;
+  return Digraph(nodes, source, range);
 end;
 
 group_types := [
