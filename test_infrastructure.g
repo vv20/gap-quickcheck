@@ -6,7 +6,7 @@ Expect := function(func)
   given := function(arg_gens)
     local to_have_properties, to_equal, to_not_break, to_break;
 
-    to_have_properties := function(props_list)
+    to_have_properties := function(props_list...)
       local result, args_list, i, j, arg, prop, tests_failed;
       tests_failed := 0;
       for i in [1..no_reps] do

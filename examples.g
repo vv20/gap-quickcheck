@@ -15,7 +15,7 @@ func := function(l)
   Sort(l);
   return l;
 end;
-Expect(func).given([QuickcheckList(QuickcheckInt)]).to_have_properties([IsSortedList]);
+Expect(func).given([QuickcheckList(QuickcheckInt)]).to_have_properties(IsSortedList);
 
 # examples for checking for breaks
 Expect(Size).given([QuickcheckGroup]).to_not_break();
