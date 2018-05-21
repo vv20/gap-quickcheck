@@ -1,7 +1,9 @@
 cache_file_name := ".gap-quickcheck-cache.g";
+seed_db := fail;
 
 GetSeed := function(func_name)
-  if not IsBound(seed_db) then
+  Print("get seed\n");
+  if seed_db = fail then
     if IsExistingFile(cache_file_name) then
       Read(cache_file_name);
     else
@@ -10,13 +12,14 @@ GetSeed := function(func_name)
   fi;
 
   if IsBound(seed_db.(func_name)) then
-    return seed_db.(func_name)[0];
+    return seed_db.(func_name)[1];
   else
     return Random([1..10000]);
   fi;
 end;
 
 AddSeed := function(func_name, seed)
+  Print("add seed\n");
   if not IsBound(seed_db.(func_name)) then
     seed_db.(func_name) := [];
   fi;
@@ -28,6 +31,7 @@ end;
 
 RemoveSeed := function(func_name, seed)
   local position;
+  Print("remove seed\n");
   if not IsBound(seed_db.(func_name)) then
     return;
   fi;
@@ -42,5 +46,6 @@ RemoveSeed := function(func_name, seed)
 end;
 
 SaveSeed := function()
-  PrintTo(cache_file_name, seed_db);
+  Print("save seed\n");
+  PrintTo(cache_file_name, "seed_db:=", seed_db, ";");
 end;
