@@ -1,10 +1,10 @@
 max_size := 100;
 no_reps := 1;
-seed := Random([1..10000]);
-rs := RandomSource(IsMersenneTwister, seed);
 
 Expect := function(func)
-  local given;
+  local given, seed, rs;
+  seed := GetSeed(NameFunction(func));
+  rs := RandomSource(IsMersenneTwister, seed);
   given := function(arg_gens)
     local to_have_properties, to_equal, to_not_break, to_break;
 
@@ -22,6 +22,7 @@ Expect := function(func)
             if not prop(result) then
               tests_failed := tests_failed + 1;
               Print("Test failed with arguments:\n");
+              AddSeed(NameFunction(func), seed);
               for arg in args_list do
                 Print(arg, "\n");
               od;
@@ -30,6 +31,9 @@ Expect := function(func)
         od;
       od;
       Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed\n");
+      if tests_failed = 0 then
+        RemoveSeed(NameFunction(func), seed);
+      fi;
     end;
 
     to_equal := function(func2)
@@ -53,6 +57,7 @@ Expect := function(func)
               if not result1 = result2 then
                 tests_failed := tests_failed + 1;
                 Print("Test failed with arguments:\n");
+                AddSeed(NameFunction(func), seed);
                 for arg in args_list do
                   Print(arg, "\n");
                 od;
@@ -60,6 +65,9 @@ Expect := function(func)
             od;
           od;
           Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed\n");
+      if tests_failed = 0 then
+        RemoveSeed(NameFunction(func), seed);
+      fi;
       end;
       return rec(on_arguments := on_arguments);
     end;
@@ -78,6 +86,7 @@ Expect := function(func)
           exited_cleanly := CALL_WITH_CATCH(func, args_list)[1];
           if not exited_cleanly then
               Print("Test failed with arguments:\n");
+              AddSeed(NameFunction(func), seed);
               for arg in args_list do
                 Print(arg, "\n");
               od;
@@ -86,6 +95,9 @@ Expect := function(func)
         od;
       od;
       Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed\n");
+      if tests_failed = 0 then
+        RemoveSeed(NameFunction(func), seed);
+      fi;
       BreakOnError := prev_value;
     end;
 
@@ -103,6 +115,7 @@ Expect := function(func)
           exited_cleanly := CALL_WITH_CATCH(func, args_list)[1];
           if exited_cleanly then
               Print("Test failed with arguments:\n");
+              AddSeed(NameFunction(func), seed);
               for arg in args_list do
                 Print(arg, "\n");
               od;
@@ -111,6 +124,9 @@ Expect := function(func)
         od;
       od;
       Print(tests_failed, " tests failed, ", max_size * no_reps - tests_failed, " tests passed\n");
+      if tests_failed = 0 then
+        RemoveSeed(NameFunction(func), seed);
+      fi;
       BreakOnError := prev_value;
     end;
     return rec(

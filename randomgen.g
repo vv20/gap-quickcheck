@@ -1,5 +1,3 @@
-LoadPackage("Digraph");
-
 QuickcheckInt := function(max, randomsource)
   return Random(randomsource, [1..max]);
 end;

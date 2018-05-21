@@ -1,5 +1,4 @@
-Read("randomgen.g");
-Read("test_infrastructure.g");
+Read("init.g");
 
 # example for equality check based on group set intersection
 #func1 := function(G, H)
