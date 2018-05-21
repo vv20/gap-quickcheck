@@ -1,5 +1,7 @@
 max_size := 100;
 no_reps := 1;
+seed := Random([1..10000]);
+rs := RandomSource(IsMersenneTwister, seed);
 
 Expect := function(func)
   local given;
@@ -13,7 +15,7 @@ Expect := function(func)
         for j in [1..max_size] do
           args_list := [];
           for arg in arg_gens do
-            Add(args_list, arg(j));
+            Add(args_list, arg(j, rs));
           od;
           result := CallFuncList(func, args_list);
           for prop in props_list do
@@ -39,7 +41,7 @@ Expect := function(func)
             for j in [1..max_size] do
               args_list := [];
               for arg in arg_gens do
-                Add(args_list, arg(j));
+                Add(args_list, arg(j,rs));
               od;
               result1 := CallFuncList(func, args_list);
               # assemble the set of arguments for the second function
@@ -71,7 +73,7 @@ Expect := function(func)
         for j in [1..max_size] do
           args_list := [];
           for arg in arg_gens do
-            Add(args_list, arg(j));
+            Add(args_list, arg(j,rs));
           od;
           exited_cleanly := CALL_WITH_CATCH(func, args_list)[1];
           if not exited_cleanly then
@@ -96,7 +98,7 @@ Expect := function(func)
         for j in [1..max_size] do
           args_list := [];
           for arg in arg_gens do
-            Add(args_list, arg(j));
+            Add(args_list, arg(j, rs));
           od;
           exited_cleanly := CALL_WITH_CATCH(func, args_list)[1];
           if exited_cleanly then
@@ -114,7 +116,8 @@ Expect := function(func)
     return rec(
     to_have_properties := to_have_properties,
     to_equal := to_equal,
-    to_not_break := to_not_break
+    to_not_break := to_not_break,
+    to_break := to_break
     );
   end;
 
