@@ -4,14 +4,14 @@ Quickcheck[1], Python Hypothesis[2] and Node.js Chai[3] libraries.
 
 ## Current Functionality
 
-- Random generation of some types: integers, permutations and some groups.
+- Random generation of integers, permutations, some groups and other basic types.
 - Generation of dependent types: lists, records and objects with more complex constructors.
 - Running of a randomised test suite with properties that the result is expected to have or the
 expected result.
+- Saving seeds that resulted in failed tests cases to avoid untraceable bugs.
 
 ## Development Plans
 
-- Saving failed tests cases to avoid untraceable bugs.
 - Allow filters to be passed to generators to generate more specific input.
 - Shrink failed tests to the smallest failures.
 - Compile into proper GAP package.
