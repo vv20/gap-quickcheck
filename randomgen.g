@@ -94,6 +94,13 @@ QuickcheckPermutationGroup := function(max, randomsource)
   return CallFuncList(Group, permutation_list);
 end;
 
+QuickcheckSmallPermutationGroup := function(max, randomsource)
+  local size, number;
+  size := Random(randomsource, [1..max]);
+  number := Random(randomsource, [1..NrSmallGroups(size)]);
+  return Range(IsomorphismPermGroup(SmallGroup(size,number)));
+end;
+
 QuickcheckCoset := function(max, randomsource)
   return QuickcheckPermutationGroup(randomsource,max) * QuickcheckPermutation(randomsource,max);
 end;
@@ -126,7 +133,8 @@ group_types := [
   QuickcheckFreeAbelianGroup,
   QuickcheckDihedralGroup,
   QuickcheckQuaternionGroup,
-  QuickcheckPermutationGroup
+  QuickcheckPermutationGroup,
+  QuickcheckSmallPermutationGroup
 ];
 
 QuickcheckGroup := function(max, randomsource)

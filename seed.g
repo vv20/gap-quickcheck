@@ -1,6 +1,10 @@
 cache_file_name := ".gap-quickcheck-cache.g";
 seed_db := fail;
 
+SaveSeed := function()
+  PrintTo(cache_file_name, "seed_db:=", seed_db, ";");
+end;
+
 GetSeed := function(func_name)
   if seed_db = fail then
     if IsExistingFile(cache_file_name) then
@@ -40,8 +44,4 @@ RemoveSeed := function(func_name, seed)
 
   Remove(seed_db.(func_name), position);
   SaveSeed();
-end;
-
-SaveSeed := function()
-  PrintTo(cache_file_name, "seed_db:=", seed_db, ";");
 end;
